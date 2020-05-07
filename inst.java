@@ -20,7 +20,7 @@ public class inst extends Application {
     Scene sce1;
     //List textlist1 = (List) new ArrayList();
     ArrayList<String> textlist1 = new ArrayList<String>();
-
+    Map<String, String> ssce2 = new HashMap<>();
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Fortuna Assistant");
@@ -50,7 +50,6 @@ public class inst extends Application {
                     Stage stage1 = new Stage();
                     stage1.setTitle("Fortuna Assistant");
                     List<TextArea> all = new ArrayList<>();
-                    Map<Object, String> ssce2 = new HashMap<>();
                     for(int i=0;i<=tlist.size()-1;i++) {
                         String instsent = "Enter the most important instances for " + tlist.get(i);
                         Label labe = new Label(instsent);
@@ -64,15 +63,15 @@ public class inst extends Application {
                     HBox hb2 = new HBox(btname);
                     hb2.setAlignment(Pos.BASELINE_CENTER);
                     vbo.getChildren().add(hb2);
-                    btname.setOnAction(new EventHandler<ActionEvent>() {
-                        @Override
-                        public void handle(ActionEvent event) {
-                            for (int i = 0; i <= tlist.size() - 1; i++) {
-                                String ab = all.get(i).getText();
-                                ssce2.put(tlist.get(i), ab);
-                            }
-                        }
-                    });
+                    //btname.setOnAction(new EventHandler<ActionEvent>() {
+                        //@Override
+                        //public void handle(ActionEvent event) {
+//                            for (int i = 0; i <= tlist.size() - 1; i++) {
+//                                String ab = all.get(i).getText();
+//                                ssce2.put(tlist.get(i), ab);
+//                            }
+                        //}
+                    //});
                     vb.getChildren().addAll(vbo);
                     vbo.setSpacing(10);
                     ScrollPane scp = new ScrollPane(vb);
@@ -89,6 +88,10 @@ public class inst extends Application {
                     btname.setOnAction(new EventHandler<ActionEvent>() {
                         @Override
                         public void handle(ActionEvent event) {
+                            for (int i = 0; i <= tlist.size() - 1; i++) {
+                                String ab = all.get(i).getText().trim();
+                                ssce2.put((String) tlist.get(i), ab);
+                            }
                             VBox vbx = new VBox();
                             Label reqlabel = new Label("Enter Requirement");
                             TextField tf = new TextField();
@@ -109,6 +112,7 @@ public class inst extends Application {
                             primaryStage.setHeight(bounds.getHeight());
                             primaryStage.setMaximized(true);
                             primaryStage.show();
+                            System.out.println(ssce2);
                             btreq.setOnAction(new EventHandler<ActionEvent>() {
                                 @Override
                                 public void handle(ActionEvent event) {
@@ -148,6 +152,15 @@ public class inst extends Application {
                                     primaryStage.setHeight(bounds.getHeight());
                                     primaryStage.setMaximized(true);
                                     primaryStage.show();
+                                }
+                            });
+                            btspecdom.setOnAction(new EventHandler<ActionEvent>() {
+                                @Override
+                                public void handle(ActionEvent event) {
+                                    String requ = tf.getText();
+                                    specification sp = new specification();
+                                    List<String> ddd = sp.specfunc(ssce2, requ);
+                                    System.out.println(ddd);
                                 }
                             });
                         }
