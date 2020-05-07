@@ -21,6 +21,7 @@ public class inst extends Application {
     //List textlist1 = (List) new ArrayList();
     ArrayList<String> textlist1 = new ArrayList<String>();
     Map<String, String> ssce2 = new HashMap<>();
+    List<TextArea> all_spec = new ArrayList<>();
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Fortuna Assistant");
@@ -96,8 +97,9 @@ public class inst extends Application {
                             Label reqlabel = new Label("Enter Requirement");
                             TextField tf = new TextField();
                             Button btreq = new Button("Sub-Req");
-                            Button btspecdom = new Button("Spec-Dom");
-                            HBox hbx = new HBox(btreq, btspecdom);
+                            Button btspec = new Button("Spec");
+                            Button btdom = new Button("Domain");
+                            HBox hbx = new HBox(btreq, btspec, btdom);
                             hbx.setAlignment(Pos.BASELINE_CENTER);
                             vbx.getChildren().addAll(reqlabel, tf, hbx);
                             vb.getChildren().addAll(vbx);
@@ -154,13 +156,38 @@ public class inst extends Application {
                                     primaryStage.show();
                                 }
                             });
-                            btspecdom.setOnAction(new EventHandler<ActionEvent>() {
+                            btspec.setOnAction(new EventHandler<ActionEvent>() {
                                 @Override
                                 public void handle(ActionEvent event) {
                                     String requ = tf.getText();
                                     specification sp = new specification();
-                                    List<String> ddd = sp.specfunc(ssce2, requ);
-                                    System.out.println(ddd);
+                                    HashMap<String, String> ddd = sp.specfunc(ssce2, requ, tlist);
+                                    List<String> mapk = new ArrayList<String>(ddd.keySet());
+                                    VBox vspecb = new VBox();
+                                    for(int i=0;i<=ddd.size()-1;i++){
+                                        String labl = mapk.get(i);
+                                        Label lab = new Label(labl);
+                                        String valuek = ddd.get(mapk.get(i));
+                                        TextArea ta = new TextArea(valuek);
+                                        all_spec.add(ta);
+                                        Button gqb = new Button("Generate Question");
+                                        HBox hqb = new HBox();
+                                        hqb.getChildren().addAll(gqb);
+                                        hqb.setAlignment(Pos.BASELINE_CENTER);
+                                        vspecb.getChildren().addAll(lab, ta, hqb);
+                                    }
+                                    vb.getChildren().addAll(vspecb);
+                                    ScrollPane scp = new ScrollPane(vb);
+                                    scp.setFitToHeight(true);
+                                    scp.setFitToWidth(true);
+                                    sce1 = new Scene(scp, 500, 200);
+                                    primaryStage.setScene(sce1);
+                                    Screen screen = Screen.getPrimary();
+                                    Rectangle2D bounds = screen.getVisualBounds();
+                                    primaryStage.setWidth(bounds.getWidth());
+                                    primaryStage.setHeight(bounds.getHeight());
+                                    primaryStage.setMaximized(true);
+                                    primaryStage.show();
                                 }
                             });
                         }
