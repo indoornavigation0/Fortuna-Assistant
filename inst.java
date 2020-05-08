@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -18,10 +19,30 @@ public class inst extends Application {
     @FXML
     TextArea txtfie;
     Scene sce1;
+    Button gqb;
     //List textlist1 = (List) new ArrayList();
     ArrayList<String> textlist1 = new ArrayList<String>();
     Map<String, String> ssce2 = new HashMap<>();
     List<TextArea> all_spec = new ArrayList<>();
+    List<TextArea> all_dom = new ArrayList<>();
+    List<TextArea> all_sque = new ArrayList<>();
+    public List<String> btnevthandler(String data){
+        generatequestions gq= new generatequestions();
+        List<String> quresult = gq.gqfunc(data);
+        return quresult;
+    }
+    VBox qsvb = new VBox();
+    HBox qshb = new HBox();
+    public void buttonaction(List<String> quere){
+        for(int i=0;i<=quere.size()-1;i++){
+            Label qlab = new Label(quere.get(i));
+            TextArea qta = new TextArea("Enter Answer");
+            all_sque.add(qta);
+            Button sqst = new Button("Stop");
+            qshb.getChildren().add(sqst);
+            qsvb.getChildren().addAll(qlab, qta);
+        }
+    }
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Fortuna Assistant");
@@ -170,9 +191,68 @@ public class inst extends Application {
                                         String valuek = ddd.get(mapk.get(i));
                                         TextArea ta = new TextArea(valuek);
                                         all_spec.add(ta);
-                                        Button gqb = new Button("Generate Question");
+                                        gqb = new Button("Generate Question");
                                         HBox hqb = new HBox();
                                         hqb.getChildren().addAll(gqb);
+                                        hqb.setAlignment(Pos.BASELINE_CENTER);
+                                        vspecb.getChildren().addAll(lab, ta, hqb);
+                                    }
+                                    vb.getChildren().addAll(vspecb);
+                                    ScrollPane scp = new ScrollPane(vb);
+                                    scp.setFitToHeight(true);
+                                    scp.setFitToWidth(true);
+                                    sce1 = new Scene(scp, 500, 200);
+                                    primaryStage.setScene(sce1);
+                                    Screen screen = Screen.getPrimary();
+                                    Rectangle2D bounds = screen.getVisualBounds();
+                                    primaryStage.setWidth(bounds.getWidth());
+                                    primaryStage.setHeight(bounds.getHeight());
+                                    primaryStage.setMaximized(true);
+                                    primaryStage.show();
+                                    gqb.setOnAction(new EventHandler<ActionEvent>() {
+                                        @Override
+                                        public void handle(ActionEvent event) {
+                                            for(int i=0;i<=all_spec.size()-1;i++){
+                                                String specstatement = all_spec.get(i).getText();
+                                                List<String> gqresult = btnevthandler(specstatement);
+                                                buttonaction(gqresult);
+                                                qshb.getChildren().add(gqb);
+                                                qshb.setAlignment(Pos.BASELINE_CENTER);
+                                                qsvb.getChildren().add(qshb);
+                                            }
+                                            vb.getChildren().addAll(qsvb);
+                                            ScrollPane scp = new ScrollPane(vb);
+                                            scp.setFitToHeight(true);
+                                            scp.setFitToWidth(true);
+                                            sce1 = new Scene(scp, 500, 200);
+                                            primaryStage.setScene(sce1);
+                                            Screen screen = Screen.getPrimary();
+                                            Rectangle2D bounds = screen.getVisualBounds();
+                                            primaryStage.setWidth(bounds.getWidth());
+                                            primaryStage.setHeight(bounds.getHeight());
+                                            primaryStage.setMaximized(true);
+                                            primaryStage.show();
+                                        }
+                                    });
+                                }
+                            });
+                            btdom.setOnAction(new EventHandler<ActionEvent>() {
+                                @Override
+                                public void handle(ActionEvent event) {
+                                    String requ = tf.getText();
+                                    Domain dom = new Domain();
+                                    HashMap<String, String> ddd = dom.domain(requ);
+                                    List<String> mapk = new ArrayList<String>(ddd.keySet());
+                                    VBox vspecb = new VBox();
+                                    for(int i=0;i<=ddd.size()-1;i++){
+                                        String labl = mapk.get(i);
+                                        Label lab = new Label(labl);
+                                        String valuek = ddd.get(mapk.get(i));
+                                        TextArea ta = new TextArea(valuek);
+                                        all_dom.add(ta);
+                                        Button dgqb = new Button("Generate Question");
+                                        HBox hqb = new HBox();
+                                        hqb.getChildren().addAll(dgqb);
                                         hqb.setAlignment(Pos.BASELINE_CENTER);
                                         vspecb.getChildren().addAll(lab, ta, hqb);
                                     }
