@@ -20,6 +20,7 @@ public class inst extends Application {
     TextArea txtfie;
     Scene sce1;
     Button gqb;
+    VBox vsb;
     //List textlist1 = (List) new ArrayList();
     ArrayList<String> textlist1 = new ArrayList<String>();
     Map<String, String> ssce2 = new HashMap<>();
@@ -33,15 +34,17 @@ public class inst extends Application {
     }
     VBox qsvb = new VBox();
     HBox qshb = new HBox();
-    public void buttonaction(List<String> quere){
+    public VBox buttonaction(List<String> quere){
         for(int i=0;i<=quere.size()-1;i++){
             Label qlab = new Label(quere.get(i));
             TextArea qta = new TextArea("Enter Answer");
             all_sque.add(qta);
             Button sqst = new Button("Stop");
-            qshb.getChildren().add(sqst);
-            qsvb.getChildren().addAll(qlab, qta);
+            Button sqgq = new Button("Generate Question");
+            qshb.getChildren().addAll(sqst, sqgq);
+            qsvb.getChildren().addAll(qlab, qta, qshb);
         }
+        return qsvb;
     }
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -149,6 +152,7 @@ public class inst extends Application {
                                     int requsize = req.size();
                                     TextField[] txtl = new TextField[requsize];
                                     HBox hbo = new HBox();
+
                                     for(int i=0;i<requsize;i++){
                                         int j=i+1;
                                         String Reqnum = "Requirement_"+j;
@@ -212,15 +216,16 @@ public class inst extends Application {
                                     gqb.setOnAction(new EventHandler<ActionEvent>() {
                                         @Override
                                         public void handle(ActionEvent event) {
+                                            List<String> gqresult = new ArrayList<>();
                                             for(int i=0;i<=all_spec.size()-1;i++){
                                                 String specstatement = all_spec.get(i).getText();
-                                                List<String> gqresult = btnevthandler(specstatement);
-                                                buttonaction(gqresult);
-                                                qshb.getChildren().add(gqb);
-                                                qshb.setAlignment(Pos.BASELINE_CENTER);
-                                                qsvb.getChildren().add(qshb);
+                                                gqresult = btnevthandler(specstatement);
+                                                //qshb.getChildren().add(gqb);
+                                                //qshb.setAlignment(Pos.BASELINE_CENTER);
+                                                //qsvb.getChildren().add(qshb);
                                             }
-                                            vb.getChildren().addAll(qsvb);
+                                            vsb = buttonaction(gqresult);
+                                            vb.getChildren().addAll(vsb);
                                             ScrollPane scp = new ScrollPane(vb);
                                             scp.setFitToHeight(true);
                                             scp.setFitToWidth(true);
